@@ -1,1 +1,27 @@
 /* Empty. Add your own CSS if you like */
+.bg-color {
+    background-color:#222222;
+    color: white;
+}
+.t-color {
+    color: azure
+}
+
+.bdr-t-none {
+    border-top: none
+}
+.bdr-b-none {
+    border-bottom: none
+}
+.bdr-l-none {
+    border-left: none
+}
+.bdr-r-none {
+    border-right: none
+}
+.align-txt-r {
+    text-align: right
+}
+.align-txt-c {
+    text-align: center
+}
