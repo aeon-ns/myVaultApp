@@ -2,8 +2,8 @@
 
 angular.module('myVault.services', ['ngResource'])
 
-    // .constant('BASE_URL', 'https://vast-citadel-12459.herokuapp.com/')
-    .constant('BASE_URL', 'http://192.168.1.4:3000/')
+    .constant('BASE_URL', 'https://vast-citadel-12459.herokuapp.com/')
+    // .constant('BASE_URL', 'http://192.168.1.4:3000/')
 
     .factory('$localStorage', ['$window', function ($window) {
         return {
