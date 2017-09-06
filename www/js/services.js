@@ -1,173 +1,10 @@
 "use strict";
 
-angular.module('myVault.services',[])
+angular.module('myVault.services', ['ngResource'])
 
-    .constant('MODE_EDIT', 0)
-    .constant('MODE_NEW', 1)
+    // .constant('BASE_URL', 'https://vast-citadel-12459.herokuapp.com/')
+    .constant('BASE_URL', 'http://192.168.1.4:3000/')
 
-    .constant('BASE_URL', 'https://vast-citadel-12459.herokuapp.com/')
-    // .constant('BASE_URL', 'http://localhost:3000/')
-
-    .factory('action', ['noteModal', 'pwordModal', 'cardModal', 'ops', 'parse', 'resources', 'notesRepo', 'pwordsRepo', 'cardsRepo', '$timeout', function (noteModal, pwordModal, cardModal, ops, parse, resources, notesRepo, pwordsRepo, cardsRepo, $timeout) {
-        var fac = {};
-        fac.openNote = function (scope, note, mode) {
-            var modal = noteModal.newNote(scope, note);
-            var resource = resources.getNoteResource();
-            modal.result.then(
-                function (newNote) {
-                    newNote = parse.note(newNote);
-                    if (mode) {
-                        console.log('Making New Note!');
-                        ops.save(newNote, resource, notesRepo);
-                    } else {
-                        console.log('Saving the note!');
-                        ops.update(newNote, resource, notesRepo);
-                    }
-                },
-                function (reason) {
-                    console.log('Modal Dismissed');
-                }
-            );
-        };
-        fac.openPword = function (scope, pword, mode) {
-            var modal = pwordModal.newPword(scope, pword);
-            var resource = resources.getPwordResource();
-            modal.result.then(
-                function (newPword) {
-                    newPword = parse.pword(newPword);
-                    if (mode) {
-                        console.log('Making New Pword!');
-                        ops.save(newPword, resource, pwordsRepo);
-                    } else {
-                        console.log('Saving the pword!');
-                        ops.update(newPword, resource, pwordsRepo);
-                    }
-                },
-                function (reason) {
-                    console.log('Modal Dismissed');
-                }
-            );
-        };
-        fac.openCard = function (scope, card, mode) {
-            var modal = cardModal.newCard(scope, card);
-            var resource = resources.getCardResource();
-            modal.result.then(
-                function (newCard) {
-                    newCard = parse.card(newCard);
-                    if (mode) {
-                        console.log('Making New Card!');
-                        ops.save(newCard, resource, cardsRepo);
-                    } else {
-                        console.log('Saving the card!');
-                        ops.update(newCard, resource, cardsRepo);
-                    }
-                },
-                function (reason) {
-                    console.log('Modal Dismissed');
-                }
-            );
-        };
-        fac.pinIt = function (obj, type) {
-            var object = { _id: obj._id, pinned: obj.pinned };
-            switch (type) {
-                case 0://Note
-                    ops.update(object, resources.getNoteResource(), notesRepo);
-                    break;
-                case 1://Pword
-                    ops.update(object, resources.getPwordResource(), pwordsRepo);
-                    break;
-                case 2://Card
-                    ops.update(object, resources.getCardResource(), cardsRepo);
-                    break;
-            }
-        };
-        fac.delIt = function (scope, index, type) {
-            switch (type) {
-                default:
-                case 0://Note Resource
-                    ops.remove(scope.nresults[index]._id, resources.getNoteResource(), notesRepo);
-                    scope.notes.splice(index, 1);
-                    break;
-                case 1://Password Resource
-                    ops.remove(scope.presults[index]._id, resources.getPwordResource(), pwordsRepo);
-                    scope.pwords.splice(index, 1);
-                    break;
-                case 2://Cards Resource
-                    ops.remove(scope.cresults[index]._id, resources.getCardResource(), cardsRepo);
-                    scope.cards.splice(index, 1);
-                    break;
-            }
-        };
-        return fac;
-    }])
-    .factory('modalOpts', [function () {
-        return {
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            size: 'md',
-            controllerAs: '$ctrl'
-        };
-    }])
-    .factory('msgModal', ['$ionicModal', 'modalOpts', function ($ionicModal, modalOpts) {
-        var fac = {};
-        var modalOptions = modalOpts;
-        fac.open = function (scope, msg) {
-            var modal = {};
-            modalOptions.templateUrl = '../views/modals/msg.html';
-            modalOptions.controller = 'MsgModalController';
-            modalOptions.scope = scope;
-            modalOptions.resolve = { msg: msg, type: 0 };
-            modal = $ionicModal.open(modalOptions);
-            return modal;
-        };
-        return fac;
-    }])
-    .factory('noteModal', ['$ionicModal', 'parse', 'modalOpts', function ($ionicModal, parse, modalOpts) {
-        var fac = {};
-        var modalOptions = modalOpts;
-        fac.newNote = function (scope, note) {
-            var noteModal = {};
-            modalOptions.controller = 'ModalController';
-            modalOptions.templateUrl = '../views/modals/note.html',
-                modalOptions.scope = scope;
-            modalOptions.resolve = {};
-            modalOptions.resolve.object = parse.note(note);
-            noteModal = $ionicModal.open(modalOptions);
-            return noteModal;
-        };
-        return fac;
-    }])
-    .factory('pwordModal', ['$ionicModal', 'parse', 'modalOpts', function ($ionicModal, parse, modalOpts) {
-        var fac = {};
-        var modalOptions = modalOpts;
-        fac.newPword = function (scope, pword) {
-            var pwordModal = {};
-            modalOptions.controller = 'ModalController';
-            modalOptions.templateUrl = '../views/modals/pword.html';
-            modalOptions.scope = scope;
-            modalOptions.resolve = {};
-            modalOptions.resolve.object = parse.pword(pword);
-            pwordModal = $ionicModal.open(modalOptions);
-            return pwordModal;
-        };
-        return fac;
-    }])
-    .factory('cardModal', ['$ionicModal', 'parse', 'modalOpts', function ($ionicModal, parse, modalOpts) {
-        var fac = {};
-        var modalOptions = modalOpts;
-        fac.newCard = function (scope, card) {
-            var cardModal = {};
-            modalOptions.controller = 'ModalController';
-            modalOptions.templateUrl = '../views/modals/card.html';
-            modalOptions.scope = scope;
-            modalOptions.resolve = {};
-            modalOptions.resolve.object = parse.card(card);
-            cardModal = $ionicModal.open(modalOptions);
-            return cardModal;
-        };
-        return fac;
-    }])
     .factory('$localStorage', ['$window', function ($window) {
         return {
             store: function (key, value) {
@@ -301,6 +138,10 @@ angular.module('myVault.services',[])
                 startFetching();
             return pwords;
         };
+        fac.reset = function () {
+            fetched = false;
+            pwords = [];
+        };
         fac.startFetching = startFetching;
         return fac;
     }])
@@ -331,30 +172,37 @@ angular.module('myVault.services',[])
         };
         fac.reset = function () {
             fetched = false;
-            notes = [];
+            cards = [];
         };
         fac.startFetching = startFetching;
         return fac;
     }])
-    .factory('handle', ['token', '$state', '$rootScope', function (token, $state, $rootScope) {
+    .factory('handle', ['token', '$state', '$rootScope', '$timeout', 'loginService', function (token, $state, $rootScope, $timeout, loginService) {
         return function (op, res) {
             var modal = {};
             var msg = '';
             if (res.status == 401) {
-                if (token.get() === null)
+                if (token.get() === null) {
                     msg = 'Unauthorized Access! Please Login/Register!';
-                else {
+                    $rootScope.$broadcast('show-msg', { msg: msg });
+                    $timeout(function () {
+                        token.set(null, false);
+                        $state.transitionTo('login');
+                    }, 3000);
+                } else {
                     msg = 'Session timedout! Please login again!';
-                    //Try to renew it! TODO
+                    loginService.renew(function () {
+                        $rootScope.$broadcast('show-msg', { msg: msg });
+                        $timeout(function () {
+                            token.set(null, false);
+                            $state.transitionTo('login');
+                        }, 3000);
+                    });
                 }
             } else {
                 msg = 'Sorry! Couldn\'t ' + op + '! Please try again!';
+                $rootScope.$broadcast('show-msg', { msg: msg });
             }
-            console.log('<--- broadcasting new-msg --->');
-            $rootScope.$broadcast('new-msg', { msg: msg }, function (modal) {
-                modal.result.then(function (res) { },
-                    function (result) { if (res.status == 401) $state.transitionTo('login'); });
-            });
             console.log('handle ----->', msg);
         };
     }])
@@ -446,11 +294,12 @@ angular.module('myVault.services',[])
             return p;
         };
         this.card = function (card) {
+            
             var c = {
                 title: card.title,
-                cardNo: card.cardNo,
-                exp: card.exp,
-                cvv: card.cvv,
+                cardNo: [parseInt(card.cardNo[0]),parseInt(card.cardNo[1]),parseInt(card.cardNo[2]),parseInt(card.cardNo[3])],
+                exp: new Date(card.exp),
+                cvv: parseInt(card.cvv),
                 pinned: card.pinned,
                 account: card.account,
                 hasCustom: card.hasCustom,
@@ -472,8 +321,9 @@ angular.module('myVault.services',[])
             acc = value;
         };
     }])
-    .service('loginService', ['resources', 'token', '$rootScope', '$state', function (resources, token, $rootScope, $state) {
+    .service('loginService', ['resources', 'token', '$rootScope', '$state', '$localStorage', function (resources, token, $rootScope, $state, $localStorage) {
         var resource = resources.getLoginResource();
+        var BODY = {};
         this.signIn = function (username, password) {
             var body = {
                 username: username,
@@ -485,28 +335,48 @@ angular.module('myVault.services',[])
                 function (res) {
                     console.log('Login Successful!');
                     console.log(res.token);
+
+                    $localStorage.store('username', username);
+
+                    //Set login token
                     token.set(res.token, true);
-                    //state transition to welcome
-                    $state.transitionTo('app');
+                    BODY = body;
+                    //Transition to app Pinned page
+                    $state.transitionTo('app.pinned');
                 },
                 function (res) {
                     console.log('Login Failed!');
-                    //Show login failed msg to user
                     $rootScope.$broadcast('login-fail', res);
                 }
                 );
         };
+        this.renew = function (fallback) {
+            resource.save(JSON.stringify(body))
+                .$promise
+                .then(
+                function (res) {
+                    console.log('Renew Successful!');
+                    console.log(res.token);
+                    $localStorage.store('username', username);
+                    //Set login token
+                    token.set(res.token, true);
+                },
+                function (res) {
+                    //Renewal failed!
+                    fallback();
+                });
+        };
     }])
-    .service('logoutService', ['resources', '$state', '$timeout', 'token', 'notesRepo', 'pwordsRepo', 'cardsRepo', function (resources, $state, $timeout, token, notesRepo, pwordsRepo, cardsRepo) {
+    .service('logoutService', ['resources', '$state', '$timeout', '$localStorage', 'token', 'notesRepo', 'pwordsRepo', 'cardsRepo', function (resources, $state, $timeout, $localStorage, token, notesRepo, pwordsRepo, cardsRepo) {
         this.signOut = function () {
             resources.getLogoutResource().get();
             token.set(null, false);
             notesRepo.reset();
             pwordsRepo.reset();
             cardsRepo.reset();
+            $localStorage.store('username', null);
             $timeout(function () {
                 $state.transitionTo('login');
-                $timeout.flush();
             }, 10);
         };
     }])
@@ -526,9 +396,92 @@ angular.module('myVault.services',[])
                 },
                 function (res) {
                     console.log('Registration Failed!');
-                    $rootScope.$broadcast('reg-fail', res);
+                    $rootScope.$broadcast('reg-fail', res)
                 }
                 );
         };
     }])
-;
+    .service('validate', ['$rootScope', function ($rootScope) {
+        var msg ='';
+        this.note = function (note) {
+            var valid = true;
+            if (!note.title){
+                msg = 'No Title! Please add a title!';
+                valid = false;
+            } 
+            else if (!note.note){
+                msg = 'No note! Please type a note to proceed';
+                valid = false;
+            } 
+            if(!valid) $rootScope.$broadcast('show-msg', {msg: msg});
+            return valid;
+        };
+        this.pword = function (obj) {
+            var valid = true;
+            if (!obj.title) {
+                msg = 'No Title! Please add a title!';
+                valid = false;
+            }
+            else if (!obj.password) {
+                msg = 'Password field is empty! Its required to proceed.';
+                valid = false;
+            }
+            else if(obj.hasCustom) {
+                var i = 0;
+                while(i<obj.customFields.length) {
+                    if (!obj.customFields[i].key) {
+                        msg = 'Field '+(i+1)+' missing! Please enter, its required, or swipe left to remove the field completely';
+                        valid = false;
+                        break;
+                    }
+                    else if (!obj.customFields[i].value) {
+                        msg = 'Value '+(i+1)+' missing! Please enter, its required, or swipe left to remove the field completely';
+                        valid = false;
+                        break;
+                    }
+                    i++;
+                }
+            }
+            if(!valid) $rootScope.$broadcast('show-msg', {msg: msg});
+            return valid;
+        };
+        this.card = function (obj) {
+            var valid = true;
+            if (!obj.title) {
+                msg = 'No Title! Please add a title!';
+                valid = false;
+            }
+            else if (!obj.cardNo[0]||!obj.cardNo[1]||!obj.cardNo[2]||!obj.cardNo[3]) {
+                msg = 'Card number is invalid! Please check.';
+                valid = false;
+            }
+            // else if(obj.cardNo[0]>9999||obj.cardNo[1]>9999||obj.cardNo[2]>9999||obj.cardNo[3]>9999
+            //     ||  obj.cardNo[0]<1000||obj.cardNo[1]>1000||obj.cardNo[2]>1000||obj.cardNo[3]>1000){
+            //     msg = 'Invalid Card Number! Please check again.'
+            //     valid = false;
+            // }
+            else if(obj.cvv && (obj.cvv<100||obj.cvv>999)) {
+                msg= 'Invalid CVV! It must contain three digits only.';
+                valid = false;
+            }
+            else if(obj.hasCustom) {
+                var i = 0;
+                while(i<obj.customFields.length) {
+                    if (!obj.customFields[i].key) {
+                        msg = 'Field '+(i+1)+' missing! Its required, or swipe left to remove the field completely';
+                        valid = false;
+                        break;
+                    }
+                    else if (!obj.customFields[i].value) {
+                        msg = 'Value '+(i+1)+' missing! Its required, or swipe left to remove the field completely';
+                        valid = false;
+                        break;
+                    }
+                    i++;
+                }
+            }
+            if(!valid) $rootScope.$broadcast('show-msg', {msg: msg});
+            return valid;
+        };
+    }])
+    ;

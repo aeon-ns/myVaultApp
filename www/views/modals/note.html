@@ -1,10 +1,49 @@
-<ion-modal-view>
-    <ion-header-bar>
+<ion-modal-view class="bg-color">
+    <ion-header-bar class="bar bar-dark">
+        <button class="button button-clear button-stable" ng-click="close()"><i class="icon ion-android-close"></i></button>
         <h1 class="title">Note</h1>
+        <button ng-if="!editing" class="button button-clear button-energized" ng-click="edit()"><strong>Edit</strong></button>
     </ion-header-bar>
-    <ion-content>
-        <form action="">
-            
-        </form>
+    <ion-content class="bg-color">
+        <div class="list bdr-none">
+
+            <div class="item item-dark">
+                Account
+            </div>
+            <ion-list>
+                <ion-radio ng-model="obj.account" ng-value="true" ng-disabled="!editing">Personal</ion-radio>
+                <ion-radio ng-model="obj.account" ng-value="false" ng-disabled="!editing">Work</ion-radio>
+            </ion-list>
+
+            <div ng-if="editing" class="item item-input item-floating-label bdr-none" style="padding-top:15px">
+                <span class="input-label positive">Title</span>
+                <input style="color:azure" type="text" placeholder="Title" ng-model="obj.title">
+            </div>
+            <div ng-if="!editing" class="item item-dark">
+                <span class="input-label light">Title</span>
+                <p style="color:azure">{{obj.title}}</p>
+            </div>
+            <div ng-if="editing" class="item item-input item-floating-label bdr-none">
+                <span class="input-label positive">Note</span>
+                <textarea class="bg-color" rows="15" style="color:azure" placeholder="Note" ng-model="obj.note" ng-disabled="!editing"></textarea>
+            </div>
+            <div ng-if="!editing" class="item item-dark">
+                <span class="input-label light">Note</span>
+                <pre aria-setsize="" style="color:azure">{{obj.note}}</pre>
+            </div>
+            <div class="item item-dark item-toggle">
+                Pin <i class="icon ion-location"></i>
+                <label class="toggle toggle-energized">  
+                    <input type="checkbox" ng-model="obj.pinned" ng-disabled="!editing">
+                    <div class="track">
+                        <div class="handle"></div>
+                    </div>
+                </label>
+            </div>
+
+        </div>
+        <div ng-if="editing" class="button button-full button-balanced" ng-click="save(obj)">
+            Save
+        </div>
     </ion-content>
 </ion-modal-view>

@@ -1,46 +1,41 @@
 <ion-view view-title="Login">
     <ion-content class="bg-color" style="padding-top:20%">
-        <div class="row">
-            <div class="col"></div>
-            <div class="col"></div>
-            <div class="col">
-                <h1 class="positive"><strong>myVault</strong></h1>
+        
+        <h1 class="positive" style="text-align: center"><strong>myVault</strong></h1>
+        <form ng-submit="submit()">
+            <div class="list" style="border:none;padding:10%;">
+                <label class="item item-input item-floating-label bdr-t-none bdr-l-none bdr-r-none">
+                    <span class="input-label positive">Username</span>
+                    <input style="color:azure" type="text" placeholder="Username" ng-model="user.username">
+                </label>
+                <label class="item item-input item-floating-label bdr-t-none bdr-l-none bdr-r-none">
+                    <span class="input-label positive" ng-class="{'assertive':!signin&&user.password!=user.cpassword}">Password</span>
+                    <input style="color:azure" type="password" placeholder="Password" ng-model="user.password">
+                </label>
+                <label ng-if="!signin" class="item item-input item-floating-label bdr-t-none bdr-l-none bdr-r-none">
+                    <span class="input-label positive" ng-class="{'assertive':user.password!=user.cpassword}">Confirm Password</span>
+                    <input style="color:azure" type="password" placeholder="Confirm Password" ng-model="user.cpassword">
+                </label>
             </div>
-            <div class="col"></div>
-            <div class="col"></div>
-        </div>
-        <div class="list" style="border:none;padding:10%;">
-            <label class="item item-input item-floating-label bdr-t-none bdr-l-none bdr-r-none">
-                <span class="input-label positive">Username</span>
-                <input style="color:azure" type="text" placeholder="Username" ng-model="user.username">
-            </label>
-            <label class="item item-input item-floating-label bdr-t-none bdr-l-none bdr-r-none">
-                <span class="input-label positive" ng-class="{'assertive':!signin&&user.password!=user.cpassword}">Password</span>
-                <input style="color:azure" type="password" placeholder="Password" ng-model="user.password">
-            </label>
-            <label ng-if="!signin" class="item item-input item-floating-label bdr-t-none bdr-l-none bdr-r-none">
-                <span class="input-label positive" ng-class="{'assertive':user.password!=user.cpassword}">Confirm Password</span>
-                <input style="color:azure" type="password" placeholder="Confirm Password" ng-model="user.cpassword">
-            </label>
-        </div>
-        <div class="row">
-            <div class="col"></div>
-            <div class="col">
-                <div class="button button-block button-positive" ng-click="submit()">
-                    {{signin?'Sign In':'Sign Up'}}
+            <div class="row">
+                <div class="col"></div>
+                <div class="col">
+                    <button type="submit" class="button button-block button-positive" ng-click="submit()">
+                        {{signin?'Sign In':'Sign Up'}}
+                    </button>
                 </div>
+                <div class="col"></div>
             </div>
-            <div class="col"></div>
-        </div>
-        <div class="row">
-            <div class="col"></div>
-            <div class="col button button-clear button-light" ng-click="switchMode()">
-                {{signin?'New User?':'Registered?'}}
+            <div class="row">
+                <div class="col"></div>
+                <div class="col button button-clear button-light" ng-click="switchMode()">
+                    {{signin?'New User?':'Registered?'}}
+                </div>
+                <div class="col">
+                    <div class="button button-clear button-positive" ng-click="switchMode()">{{signin?'Sign Up':'Sign In'}}</div>
+                </div>
+                <div class="col"></div>
             </div>
-            <div class="col">
-                <div class="button button-clear button-positive" ng-click="switchMode()">{{signin?'Sign Up':'Sign In'}}</div>
-            </div>
-            <div class="col"></div>
-        </div>
+        </form>
     </ion-content>
 </ion-view>

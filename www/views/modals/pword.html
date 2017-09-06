@@ -1,0 +1,83 @@
+<ion-modal-view class="bg-color">
+    <ion-header-bar class="bar bar-dark">
+        <button class="button button-clear button-stable" ng-click="close()"><i class="icon ion-android-close"></i></button>
+        <h1 class="title">Password</h1>
+        <button ng-if="!editing" class="button button-clear button-energized" ng-click="edit()"><strong>Edit</strong></button>
+        <button ng-if="editing" class="button button-clear button-energized ion-plus" ng-click="addField()"><strong> Field</strong></button>
+    </ion-header-bar>
+    <ion-content class="bg-color">
+        <div class="list bdr-none">
+
+            <div class="item item-dark">
+                Account
+            </div>
+            <ion-list>
+                <ion-radio ng-model="obj.account" ng-value="true" ng-disabled="!editing">Personal</ion-radio>
+                <ion-radio ng-model="obj.account" ng-value="false" ng-disabled="!editing">Work</ion-radio>
+            </ion-list>
+            <div ng-if="editing" class="item item-input item-floating-label bdr-none" style="padding-top:15px">
+                <span class="input-label positive">Title</span>
+                <input style="color:azure" type="text" placeholder="Title" ng-model="obj.title">
+            </div>
+            <div ng-if="!editing" class="item item-dark">
+                <span class="input-label light">Title</span>
+                <p style="color:azure">{{obj.title}}</p>
+            </div>
+            <div ng-if="editing" class="item item-input item-floating-label bdr-none">
+                <span class="input-label positive">Username</span>
+                <input style="color:azure" type="text" placeholder="Username" ng-model="obj.username">
+            </div>
+            <div ng-if="!editing" class="item item-dark">
+                <span class="input-label light">Username</span>
+                <p style="color:azure">{{obj.username}}</p>
+            </div>
+            <div ng-if="editing" class="item item-input item-floating-label bdr-none">
+                <span class="input-label positive">Password</span>
+                <input style="color:azure" type="password" placeholder="Password" ng-model="obj.password">
+            </div>
+            <div ng-if="!editing" class="item item-dark" ng-click="toggleShow()">
+                <span class="input-label light">Password</span>
+                <p style="color:azure">{{show?obj.title:'*********'}}</p>
+            </div>
+            <br>
+            <br>
+            <div class="item item-energized item-divider"></div>
+
+            <ul ng-if="obj.hasCustom" class="list">
+                <li ng-repeat="field in obj.customFields" on-swipe-left="delField($index)">
+                    <div ng-if="editing" class="item item-input item-floating-label bdr-none">
+                        <span class="input-label positive">Field</span>
+                        <input style="color:azure" type="text" placeholder="Field Name" ng-model="field.key">
+                    </div>
+                    <div ng-if="!editing" class="item item-dark">
+                        <span class="input-label light">Field</span>
+                        <p style="color:azure">{{field.key}}</p>
+                    </div>
+                    <div ng-if="editing" class="item item-input item-floating-label bdr-none">
+                        <span class="input-label positive">Value</span>
+                        <input style="color:azure" type="password" placeholder="Field Value" ng-model="field.value">
+                    </div>
+                    <div ng-if="!editing" class="item item-dark">
+                        <span class="input-label light">Value</span>
+                        <p style="color:azure">{{field.value}}</p>
+                    </div>
+                    <div ng-if="!$last" class="item item-energized item-divider"></div>
+                </li>
+            </ul>
+            <div ng-if="obj.hasCustom" class="item item-energized item-divider"></div>
+            <div class="item item-dark item-toggle">
+                Pin <i class="icon ion-location"></i>
+                <label class="toggle toggle-energized">  
+                    <input type="checkbox" ng-model="obj.pinned" ng-disabled="!editing">
+                    <div class="track">
+                        <div class="handle"></div>
+                    </div>
+                </label>
+            </div>
+
+        </div>
+        <div ng-if="editing" class="button button-full button-balanced" ng-click="save(obj)">
+            Save
+        </div>
+    </ion-content>
+</ion-modal-view>

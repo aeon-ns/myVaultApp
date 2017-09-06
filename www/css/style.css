@@ -1,12 +1,30 @@
-/* Empty. Add your own CSS if you like */
+.popover {
+    height: auto !important;
+}
+.popover ion-header-bar {
+    position: relative;
+}
+.popover ion-content {
+    top: 0;
+    position: relative;
+}
+.popover-inner-content {
+    width: 100%;
+    padding: 5px 20px;
+  }
 .bg-color {
     background-color:#222222;
     color: white;
 }
 .t-color {
-    color: azure
+    color: azure;
 }
-
+.bdr-none {
+    border: none;
+}
+.bdr-color {
+    border-color: #222222;
+}
 .bdr-t-none {
     border-top: none
 }

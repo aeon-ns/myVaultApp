@@ -1,25 +1,40 @@
 <ion-view view-title="Cards">
-        <ion-content class="bg-color" padding="15">
-            <h3 class="bg-color">Cards</h3>
-            <div class="list card bg-color">
-                <a href="#" class="item item-icon-left bg-color bdr-t-none">
-                            <i class="icon ion-card"></i>
-                            <div class="row">
-                                <strong>Third</strong>
-                            </div>  
-                            <div class="row">
-                                Item
-                            </div>
-                        </a>
-                <a href="#" class="item item-icon-left bg-color ">
-                                <i class="icon ion-wifi"></i>
-                                <div class="row">
-                                    <strong>Third</strong>
-                                </div>  
-                                <div class="row">
-                                    Item
-                                </div>
-                        </a>
-            </div>
-        </ion-content>
-    </ion-view>
+
+    <ion-nav-buttons side="right">
+        <button class="button button-clear button-calm ion-plus" ng-click="newCard()"> <strong>Card</strong></button>
+    </ion-nav-buttons>
+
+    <ion-content class="bg-color" padding="15">
+
+        <ion-refresher pulling-text="Pull down to Refresh.." on-refresh="refresh()"></ion-refresher>
+        <ion-list class="card">
+            <ion-item class="item-stable">
+                Cards
+            </ion-item>
+            <ion-item class="item-dark item-icon-left" ng-repeat="card in cards | filter: {$: searchText, account: account} as cres" ng-click="showCard(card)">
+                <i class="icon ion-card energized"></i>
+                <div class="row">
+                    <strong>{{card.title}} </strong>
+                </div>
+                <div class="row">
+                    XXXX-XXXX-XXXX-{{card.cardNo[3]}}
+                </div>
+                <ion-option-button class="button-assertive" ng-click="remove($index)">Delete</ion-option-button>
+                <ion-option-button class="button-energized" ng-click="togglePin(card)">{{card.pinned?'Unpin':'Pin'}}</ion-option-button>
+            </ion-item>
+            <ion-item ng-if="!cres.length" class="item-dark" style="text-align:center">
+                No cards to show.
+            </ion-item>
+        </ion-list>
+        <div class="bar bar-footer bar-dark item-input-inset">
+            <label class="item-input-wrapper">
+              <i class="icon ion-ios-search placeholder-icon"></i>
+              <input type="search" placeholder="Search" ng-model="searchText">
+            </label>
+            <button class="button button-clear" ng-click="searchText=''">
+              Cancel
+            </button>
+        </div>
+    </ion-content>
+
+</ion-view>

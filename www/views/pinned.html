@@ -1,67 +1,70 @@
 <ion-view view-title="Pinned">
+    <ion-nav-buttons side="right">
+        <button class="button button-clear button-calm ion-plus" ng-click="showPopover($event)"> <strong>Add</strong></button>
+    </ion-nav-buttons>
     <ion-content class="bg-color" padding="15">
-
-        <h3 class="bg-color">Notes</h3>
-        <div class="list card bg-color">
-            <a href="#" class="item item-icon-left bg-color">
-                <i class="icon ion-document"></i>
+        <ion-refresher pulling-text="Pull down to Refresh.." ion-refresh="refresh()"></ion-refresher>
+        <ion-list class="card">
+            <ion-item class="item-stable">
+                Notes
+            </ion-item>
+            <ion-item class="item-dark item-icon-left" ng-repeat="note in notes | filter: {$: searchText, account: account, pinned: true} as nres"
+                ng-click="showNote(note)">
+                <i class="icon ion-document energized"></i>
                 <div class="row">
-                    <strong>Third</strong>
-                </div>  
-                <div class="row">
-                    Item
+                    <strong>{{note.title}} </strong>
                 </div>
-            </a>
-            <a href="#" class="item item-icon-left bg-color ">
-                    <i class="icon ion-wifi"></i>
-                    <div class="row">
-                        <strong>Third</strong>
-                    </div>  
-                    <div class="row">
-                        Item
-                    </div>
-            </a>
-        </div>
-
-        <h3 class="bg-color">Passwords</h3>
-        <div class="list card bg-color">
-            <a href="#" class="item item-icon-left bg-color bdr-t-none">
-                    <i class="icon ion-locked"></i>
-                    <div class="row">
-                        <strong>Third</strong>
-                    </div>
-                </a>
-            <a href="#" class="item item-icon-left bg-color ">
-                        <i class="icon ion-wifi"></i>
-                        <div class="row">
-                            <strong>Third</strong>
-                        </div>  
-                        <div class="row">
-                            Item
-                        </div>
-                </a>
-        </div>
-
-        <h3 class="bg-color">Cards</h3>
-        <div class="list card bg-color">
-            <a href="#" class="item item-icon-left bg-color bdr-t-none">
-                        <i class="icon ion-card"></i>
-                        <div class="row">
-                            <strong>Third</strong>
-                        </div>  
-                        <div class="row">
-                            Item
-                        </div>
-                    </a>
-            <a href="#" class="item item-icon-left bg-color ">
-                            <i class="icon ion-wifi"></i>
-                            <div class="row">
-                                <strong>Third</strong>
-                            </div>  
-                            <div class="row">
-                                Item
-                            </div>
-                    </a>
+                <div class="row">
+                    {{note.note}}
+                </div>
+                <ion-option-button class="button-assertive" ng-click="remove(note,0)">Delete</ion-option-button>
+                <ion-option-button class="button-energized" ng-click="unpin(note,0)">Unpin</ion-option-button>
+            </ion-item>
+            <ion-item ng-if="!nres.length" class="item-dark" style="text-align:center">
+                No notes to show.
+            </ion-item>
+            <ion-item class="item-stable">
+                Passwords
+            </ion-item>
+            <ion-item class="item-dark item-icon-left" ng-repeat="pword in pwords | filter: {$: searchText, account: account, pinned: true} as pres"
+                ng-click="showPword(pword)">
+                <i class="icon ion-ios-locked energized"></i>
+                <div class="row">
+                    <strong>{{pword.title}}</strong>
+                </div>
+                <ion-option-button class="button-assertive" ng-click="remove(pword,1)">Delete</ion-option-button>
+                <ion-option-button class="button-energized" ng-click="unpin(pword,1)">Unpin</ion-option-button>
+            </ion-item>
+            <ion-item ng-if="!pres.length" class="item-dark" style="text-align:center">
+                No passwords to show.
+            </ion-item>
+            <ion-item class="item-stable">
+                Cards
+            </ion-item>
+            <ion-item class="item-dark item-icon-left" ng-repeat="card in cards | filter: {$: searchText, account: account, pinned: true} as cres"
+                ng-click="showCard(card)">
+                <i class="icon ion-card energized"></i>
+                <div class="row">
+                    <strong>{{card.title}} </strong>
+                </div>
+                <div class="row">
+                    XXXX-XXXX-XXXX-{{card.cardNo[3]}}
+                </div>
+                <ion-option-button class="button-assertive" ng-click="remove(card,2)">Delete</ion-option-button>
+                <ion-option-button class="button-energized" ng-click="unpin(card,2)">Unpin</ion-option-button>
+            </ion-item>
+            <ion-item ng-if="!cres.length" class="item-dark" style="text-align:center">
+                No cards to show.
+            </ion-item>
+        </ion-list>
+        <div class="bar bar-footer bar-dark item-input-inset">
+            <label class="item-input-wrapper">
+              <i class="icon ion-ios-search placeholder-icon"></i>
+              <input type="search" placeholder="Search" ng-model="searchText">
+            </label>
+            <button class="button button-clear" ng-click="searchText=''">
+              Cancel
+            </button>
         </div>
     </ion-content>
 </ion-view>

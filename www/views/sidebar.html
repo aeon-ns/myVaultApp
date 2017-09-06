@@ -11,29 +11,39 @@
         <ion-nav-view name="mainContent"></ion-nav-view>
     </ion-side-menu-content>
     <ion-side-menu side="left">
-        <ion-header-bar class="bar-positive">
-            <h1 class="title">Navigation</h1>
+        <ion-header-bar class="bar-dark">
+            <h1 class="title" style="text-align:center"><strong>myVault</strong></h1>
         </ion-header-bar>
-        <ion-content>
-            <ion-list>
-                <ion-item menu-close href="#/app/pinned">
-                    Pinned
-                </ion-item>
-                <ion-item menu-close href="#/app/notes">
-                    Notes
-                </ion-item>
-                <ion-item menu-close href="#/app/pwords">
-                    Passwords
-                </ion-item>
-                <ion-item menu-close href="#/app/cards">
-                    Cards
-                </ion-item>
-                <ion-item class="item-divider">
-                </ion-item>
-                <ion-item menu-close href="#/app/search">
-                    Search
-                </ion-item>
-            </ion-list>
+        <ion-content class="bg-color">
+            <div class="list list-dark">
+                <div class="item item-calm item-divider">Account Mode</div>
+                <div class="item item-icon-right item-dark" menu-close ng-click="setAccount(true)">
+                    Personal <i class="icon" ng-class="{'ion-ios-circle-filled calm':account,'ion-ios-circle-outline':!account}"></i>
+                </div>
+                <div class="item item-icon-right item-dark" menu-close ng-click="setAccount(false)">
+                    Work <i class="icon" ng-class="{'ion-ios-circle-filled calm':!account,'ion-ios-circle-outline':account}"></i>
+                </div>
+                <div class="item item-calm item-divider">Categories</div>
+                <div class="item item-icon-right item-dark" menu-close ui-sref="app.pinned">
+                    Pinned <i class="icon ion-location energized"></i>
+                </div>
+                <div class="item item-icon-right item-dark" menu-close ui-sref="app.notes">
+                    Notes <i class="icon ion-document energized"></i>
+                </div>
+                <div class="item item-icon-right item-dark" menu-close ui-sref="app.pwords">
+                    Passwords <i class="icon ion-ios-locked energized"></i>
+                </div>
+                <div class="item item-icon-right item-dark" menu-close ui-sref="app.cards">
+                    Cards <i class="icon ion-card energized"></i>
+                </div>
+                <div class="item item-calm item-divider">User Info</div>
+                <div class="item item-icon-right item-dark" menu-close>
+                    User: {{username}} <i class="icon ion-person"></i>
+                </div>
+                <div class="item item-icon-right item-dark " menu-close ng-click="logout()">
+                    Logout <i class="icon ion-log-out assertive"></i>
+                </div>
+            </div>
         </ion-content>
     </ion-side-menu>
 </ion-side-menus>
